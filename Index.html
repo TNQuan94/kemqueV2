@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tính Sản Xuất Kem Que</title>
+
+<style>
+body{
+    font-family:Arial,sans-serif;
+    background:#f2f2f2;
+    margin:0;
+    padding:15px;
+}
+
+.container{
+    max-width:900px;
+    margin:auto;
+    background:white;
+    border-radius:12px;
+    padding:15px;
+    box-shadow:0 2px 10px rgba(0,0,0,.15);
+}
+
+h2{
+    text-align:center;
+    margin-bottom:20px;
+}
+
+.grid{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:12px;
+}
+
+.card{
+    padding:12px;
+    border-radius:8px;
+}
+
+.input-box{
+    background:#fff200;
+}
+
+.fixed-box{
+    background:#92d050;
+}
+
+.result-box{
+    background:#00b0f0;
+    color:white;
+}
+
+.time-box{
+    background:#ffc000;
+}
+
+label{
+    display:block;
+    font-weight:bold;
+    margin-bottom:6px;
+}
+
+input{
+    width:100%;
+    padding:10px;
+    font-size:16px;
+    border:1px solid #999;
+    border-radius:5px;
+    box-sizing:border-box;
+}
+
+.value{
+    text-align:center;
+    font-size:24px;
+    font-weight:bold;
+    margin-top:10px;
+}
+
+.footer{
+    margin-top:15px;
+    text-align:center;
+    font-size:13px;
+    color:#555;
+}
+
+@media(max-width:700px){
+    .grid{
+        grid-template-columns:1fr;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h2>📦 TÍNH SẢN XUẤT KEM QUE</h2>
+
+<div class="grid">
+
+<!-- Ô vàng -->
+
+<div class="card input-box">
+<label>SL nấu (kg)</label>
+<input type="number" id="slNau" value="1500">
+</div>
+
+<div class="card input-box">
+<label>Số thùng hiện tại</label>
+<input type="number" id="thungHienTai" value="1000">
+</div>
+
+<!-- Ô xanh lá -->
+
+<div class="card fixed-box">
+<label>Khối lượng que 60ml</label>
+<input type="number" step="0.0001" id="kl60" value="0.0383">
+</div>
+
+<div class="card fixed-box">
+<label>Khối lượng que 70ml</label>
+<input type="number" step="0.0001" id="kl70" value="0.0471">
+</div>
+
+<div class="card fixed-box">
+<label>Tốc độ que 60ml (que/phút)</label>
+<input type="number" id="tocDo60" value="63">
+</div>
+
+<div class="card fixed-box">
+<label>Tốc độ que 70ml (que/phút)</label>
+<input type="number" id="tocDo70" value="60">
+</div>
+
+<!-- Ô xanh dương -->
+
+<div class="card result-box">
+<label>Số thùng que 60ml</label>
+<div class="value" id="soThung60">0</div>
+</div>
+
+<div class="card result-box">
+<label>Số thùng que 70ml</label>
+<div class="value" id="soThung70">0</div>
+</div>
+
+<!-- Ô cam -->
+
+<div class="card time-box">
+<label>Thời gian SX que 60ml (giờ)</label>
+<div class="value" id="tg60">0</div>
+</div>
+
+<div class="card time-box">
+<label>Thời gian SX que 70ml (giờ)</label>
+<div class="value" id="tg70">0</div>
+</div>
+
+</div>
+
+<div class="footer">
+Tính theo công thức Excel
+</div>
+
+</div>
+
+<script>
+
+function tinhToan(){
+
+    let slNau =
+        parseFloat(document.getElementById("slNau").value) || 0;
+
+    let thungHienTai =
+        parseFloat(document.getElementById("thungHienTai").value) || 0;
+
+    let kl60 =
+        parseFloat(document.getElementById("kl60").value) || 0;
+
+    let kl70 =
+        parseFloat(document.getElementById("kl70").value) || 0;
+
+    let tocDo60 =
+        parseFloat(document.getElementById("tocDo60").value) || 0;
+
+    let tocDo70 =
+        parseFloat(document.getElementById("tocDo70").value) || 0;
+
+    if(
+        kl60 <= 0 ||
+        kl70 <= 0 ||
+        tocDo60 <= 0 ||
+        tocDo70 <= 0
+    ){
+        return;
+    }
+
+    // F4
+    let soThung60 =
+        slNau / kl60 / 12;
+
+    // G4
+    let soThung70 =
+        slNau / kl70 / 12;
+
+    // I4
+    let tg60 =
+        (soThung60 - thungHienTai) * 12 / tocDo60 / 60;
+
+    // J4
+    let tg70 =
+        (soThung70 - thungHienTai) * 12 / tocDo70 / 60;
+
+    document.getElementById("soThung60").innerText =
+        soThung60.toFixed(1);
+
+    document.getElementById("soThung70").innerText =
+        soThung70.toFixed(1);
+
+    document.getElementById("tg60").innerText =
+        tg60.toFixed(2);
+
+    document.getElementById("tg70").innerText =
+        tg70.toFixed(2);
+}
+
+document.querySelectorAll("input").forEach(function(el){
+    el.addEventListener("input", tinhToan);
+});
+
+tinhToan();
+
+</script>
+
+</body>
+</html>
